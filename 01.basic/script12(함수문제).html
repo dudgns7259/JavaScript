@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button type = "button" onclick="func1()">클릭1</button>
+    <button type = "button" onclick="func2(10)">클릭2</button>
+    <button type = "button" onclick="func3('홍길동', 10)">클릭3</button>
+
+    <script>
+
+        var func1 = function(){
+            alert("func1 실행");
+        }
+
+        var func2 = function(a){
+            if(a % 2 == 0){
+               alert("짝수")
+            }else{
+               alert("홀수")
+            }
+        }
+
+        var func3 = function(a, b) {
+            alert(a + "님의 점수 : " + b)
+        }
+
+        // 화살표함수
+/*         var func1 =()  =>{
+            return alert("func1 실행");
+        } 
+        
+        var func2 = (a) =>{
+            if(a % 2 == 0){
+                return alert("짝수")
+            }else{
+                return alert("홀수")
+            }
+        }
+
+        var func3 = (a, b) =>{
+            return alert(a + "님의 점수 : " + b)
+        } */
+
+        function point (a,b,c,d){
+            console.log(a + "님의 평균 : " + (b + c + d)/3)
+        }
+        point("홍길동", 90, 80, 60);
+
+        var point1 = function(a,b,c,d){
+            console.log(a + "님의 평균 : " + (b + c + d)/3)
+        }
+        point1("김태희", 90, 95, 100);
+
+        
+
+    </script>
+
+</body>
+</html>
