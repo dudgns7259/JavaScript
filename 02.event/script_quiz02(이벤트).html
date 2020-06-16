@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        window.onload = function(){ //화면 로딩이 끝난 이후에 실행되는 이벤트
+            var ok1 = document.getElementById("ok1").click;
+            var ok2 = document.getElementById("ok2");
+
+            ok1.onclick = function(){
+                if(confirm("구글로 이동하시겠습니까.")){
+                    location.href = "https://www.google.com";
+                }
+            }
+
+            ok2.onclick = function(){
+                if(confirm("네이버로 이동하시겠습니까.")){
+                    location.href = "https://www.naver.com";
+                }
+            }
+
+        }
+    </script>
+    <!-- 페이지 이동은location.href 로 이동 -->
+    <button type="botton" id="ok1" >구글로 이동</button>
+    <button type="botton" id="ok2">네이버로 이동</button>
+
+
+</body>
+</html>
