@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <section align = "center">
+        <img src = "1.jpg" whdth = "200px" class = "img1" style = "border: 3px solid black;"><br>
+        <hr>
+        <select id = "select1"> 
+            <option value = "1.jpg">설현</option>
+            <option value = "2.jpg">태연</option>
+            <option value = "3.jpg">쯔위</option>
+            <option value = "4.jpg">슬기</option>
+            <option value = "5.jpg">아이유</option>
+        </select>
+
+
+        <input type = "color" class = "input1">
+        보더값 : <input type = "text" class = "border" style = "width: 35px;">
+        <button type = "button" class = "btn1">보더값 변경</button>
+        
+    </section>
+    <script>
+        var select1 = document.querySelector("#select1");
+        var input1 = document.querySelector(".input1");
+        var img1 = document.querySelector(".img1");
+        var btn1 = document.querySelector(".btn1");
+        var border = document.querySelector(".border");
+
+        btn1.onchange = function(){
+            img1.style.border = border.value + "px solid black"
+        }
+
+
+        select1.onchange = function(){
+            img1.src = select1.value; //이미지를 변경하는 작업
+        }
+
+        input1.onchange = function(){
+            img1.style.borderColor = input1.value;
+        }
+
+    </script>
+
+    <script>
+
+    </script>
+    
+</body>
+</html>

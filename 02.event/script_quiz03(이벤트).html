@@ -7,7 +7,7 @@
 </head>
 <body>
     
-    <h2>자바스크립트 카운트</h2>
+<!--     <h2>자바스크립트 카운트</h2>
     <input type="text" value="0" id = "result">
     <button type="button" id = "p">+</button>
     <button type="button" id = "m">-</button>
@@ -29,8 +29,29 @@
             }   
         }
 
-        
+    </script> -->
 
+    <h2>자바스크립트 카운트</h2>
+    <input type="text" value="0" id = "result">
+    <button type="button" onclick="calc(this)">+</button>
+    <button type="button" onclick="calc(this)">-</button>
+
+    <script>
+        function calc(oper){
+            var result = document.getElementById("result");
+
+            if(oper.innerHTML === "+"){ //플러스버튼
+                result.value++;
+            }else if(oper.innerHTML === "-"){
+                
+                if(result.value <= 0){
+                    alert("음수값은 허용할 수 없습니다.")
+                    return;
+                }else{
+                    result.value--;
+                }
+            }
+        }
     </script>
 
 
