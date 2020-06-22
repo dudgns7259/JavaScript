@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        ul li {list-style:none; display: inline-block; border: 2px solid #333; padding: 15px 20px; cursor: pointer; width: 25%;}
+        .toggle-menu {display: none;}
+        .active {display: block; animation: fadeIn 2s linear;} 
+
+        @keyframes fadeIn {
+        from {
+            opacity: 0;
+            color: red;}
+        }to{
+            opacity: 1;
+            color : #333;
+        }
+    </style>
+</head>
+<body>
+    <h3>토글탭</h3>
+    <section>
+        <ul class = "toggle">
+            <li data-id = "#toggle1">메뉴1</li>
+            <li data-id = "#toggle2">메뉴2</li>
+            <li data-id = "#toggle3">메뉴3</li>
+        </ul>
+
+        <div class = "toggle-menu" id = "toggle1">
+            토글메뉴1
+        </div>
+        <div class = "toggle-menu" id = "toggle2">
+            토글메뉴2
+        </div>
+        <div class = "toggle-menu" id = "toggle3">
+            토글메뉴3
+        </div>
+    </section>
+
+    <script>
+        /* 
+            1. ul에 이벤트 버블링을 이용해서 클릭이벤트를 걸고 클릭되는 타겟의 data-id를 얻습니다.
+            2. toggle-menu의 active속성을 삭제
+            3. data-id의 값에 알맞는 태그에 active속성을 추가 
+         */
+
+         var toggle = document.querySelector(".toggle");
+         var toggle1 = document.getElementById("toggle1");
+         var toggle2 = document.getElementById("toggle2");
+         var toggle3 = document.getElementById("toggle3");
+         var toggleList = document.querySelectorAll(".toggle-menu");
+         toggle.onclick = function(){
+
+             /* if(event.target.tagName !== "LI")return;
+             console.log(event.target.dataset.id)
+
+             if(event.target.dataset.id === "#toggle1"){
+                toggle1.classList.toggle('active');
+
+             }else if(event.target.dataset.id === "#toggle2"){
+
+                toggle2.classList.toggle('active');
+
+             }else if(event.target.dataset.id === "#toggle3"){
+
+                toggle3.classList.toggle('active');
+             } */
+             //active속성을 삭제 
+
+             if(event.target.tagName !== "LI")return;
+             
+            for(var i = 0 ; i < toggleList.length ; i++){
+
+                if(toggleList[i].classList.contains("active")){
+                    toggleList[i].classList.remove("active");
+                }
+            }             
+
+             //active속성을 추가
+             document.querySelector(event.target.dataset.id).classList.add("active");
+
+
+         }
+    </script>
+</body>
+</html>

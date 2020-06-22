@@ -4,15 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        
-        table,
-        thead tr th,
-        tbody tr td {border: 1px solid #777;}
-    </style>
 </head>
 <body>
-    <h2>EVENT속성을 이용해서 다음을 구현하세요.</h2>
+
+    <h3>버블링 코드로 변경 </h3>
+
+    <div>
+        <ul class = "parent">
+            <li class = "list"><img src = "img/1.jpg" alt = "1" width="100"></li>
+            <li class = "list"><img src = "img/2.jpg" alt = "1" width="100"></li>
+            <li class = "list"><img src = "img/3.jpg" alt = "1" width="100"></li>
+            <li class = "list"><img src = "img/4.jpg" alt = "1" width="100"></li>
+        </ul>
+    </div>
+
+    결과
+    <div class  = "result">
+        <li><img src = "img/1.jpg" alt = "결과" width="300"></li>
+    </div>
+
+    <hr>
 
     <table>
         <thead>
@@ -23,7 +34,7 @@
                 <th>삭제</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class = "arr">
             <tr class = "outList">
                 <td>1</td>
                 <td>첫글</td>
@@ -58,19 +69,22 @@
     </table>
 
     <script>
-                  
-        var list = document.querySelectorAll(".list");
-        var outList = document.querySelectorAll(".outList");
+        //사진
+        var parent = document.querySelector(".parent");
+        var result = document.querySelector(".result li img");
+        parent.onclick = function(){
+            if(event.target.tagName !== "IMG") return;
+            result.src = event.target.src;
+        }
 
-
-        for(var i = 0 ; i < list.length ; i++){
-            list[i].onclick = function(){   
-                
-                event.target.parentElement.parentElement.remove(); //현재 대상의 부모노드의 자체를 삭제
-
-            }   
+        //삭제
+        var arr = document.querySelector(".arr");
+        arr.onclick = function() {
+            if(event.target.tagName !== "BUTTON"){ return; }
+                event.target.parentElement.parentElement.remove();
         }
 
     </script>
+
 </body>
 </html>
