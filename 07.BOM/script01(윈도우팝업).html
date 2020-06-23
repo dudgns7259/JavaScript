@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button type = "button" id = "popUp">새창열기</button>
+    <script>
+        var popUp = document.getElementById("popUp")
+        popUp.onclick = function() {
+            
+           // window.open(문서주소, 이름, "옵션=값, 옵션=값");
+          // window.open("https://www.naver.com", "네이버", "width=300, height=300, left=1000, top = 200")
+          window.open("testPopUp.html", "팝업", "width=300, height=300, left=100, top = 100")
+
+        }
+    </script>
+</body>
+</html>
