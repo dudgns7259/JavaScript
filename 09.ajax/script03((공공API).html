@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        
+
+        //좌표성공함수
+        function ajax (position){
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+
+            fetch(`https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json?lat=${lat}&lng=${lng}&m=5000`).then(function(response){
+    
+                if(response.status !== 200){
+                    alert("경로탐색이 불가합니다.")
+                }else{
+                    return response.json(); 
+                }
+            }).then(function(publicData){
+                console.log(publicData);
+            })
+        }
+
+        //좌표 실패함수
+        function coorFail (position){}
+
+
+        (function(){
+            navigator.geolocation.getCurrentPosition(ajax, coorFail)
+        })();
+        
+    </script>
+</body>
+</html>
