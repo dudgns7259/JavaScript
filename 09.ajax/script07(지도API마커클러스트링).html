@@ -28,20 +28,8 @@
     <div id="map"></div>
     <script>
         var map;
-        //지도에 맵을 생성하는 코드
-        function initMap() {
-          map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 2,
-            center: new google.maps.LatLng(2.8,-187.3)
-            
-          });
-
-          //sdk땡겨오는 코드
-          var script = document.createElement('script');
-          script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
-          document.getElementsByTagName('head')[0].appendChild(script);
-        }
-  
+   
+         
         //마커를 루프로 돌려서 화면에 찍어주는 코드
         // window.eqfeed_callback = function(results) {
 
@@ -55,8 +43,6 @@
         //     });
         //   }
         // }
-
-
 
     var lat;
     var lng;
@@ -78,16 +64,20 @@
             map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 13,
                 center: new google.maps.LatLng(lat ,lng)
-        })
-
-
+        });
+    
+        //sdk땡겨오는 코드
+          var script = document.createElement('script');
+          script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
+          document.getElementsByTagName('head')[0].appendChild(script);
+  
         //마커를 루프로 돌려서 화면에 찍어주는 코드
-        window.eqfeed_callback = function(results) {
+        window.eqfeed_callback = function(publicData) {
 
-            console.log(results);
+            console.log(publicData);
             
-          for (var i = 0; i < results.features.length; i++) {
-            var coords = results.features[i].geometry.coordinates;
+            for (var i = 0; i < publicData.features.length; i++) {
+            var coords = publicData.features[i].geometry.coordinates;
             var latLng = new google.maps.LatLng(lat ,lng);
             var marker = new google.maps.Marker({
               position: latLng,
@@ -95,7 +85,8 @@
             });
           }
         }
-     })
+        })
+
     }//ajax end
 
 
@@ -104,9 +95,9 @@
 
         }
 
-        (function(){
+        function initMap() {
             navigator.geolocation.getCurrentPosition(ajax, coordFail);
-        })();
+        }
 
 
 
