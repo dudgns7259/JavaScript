@@ -24,34 +24,22 @@
 
 </head>
 <body>
+
     <h2 align = "center">코로나19 마스크 현황</h2>    
     <div id="map"></div>
+
     <script>
-        var map;
-   
-         
-        //마커를 루프로 돌려서 화면에 찍어주는 코드
-        // window.eqfeed_callback = function(results) {
-
-        //     console.log(results);
-        //   for (var i = 0; i < results.features.length; i++) {
-        //     var coords = results.features[i].geometry.coordinates;
-        //     var latLng = new google.maps.LatLng(coords[1],coords[0]);
-        //     var marker = new google.maps.Marker({
-        //       position: latLng,
-        //       map: map
-        //     });
-        //   }
-        // }
-
+    var map;
     var lat;
     var lng;
     //위치정보의 성공 함수
     function ajax(position) {
+
+      console.log(position)
          lat = position.coords.latitude;
          lng = position.coords.longitude;
 
-        fetch(`https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json?lat=${lat}&lng=${lng}&m=5000`).then(function (response) {
+        fetch(`https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json?lat=${lat}&lng=${lng}&m=2000`).then(function (response) {
 
             if (response.status !== 200) {
                 alert("경로탐색이 불가합니다.")
@@ -59,10 +47,10 @@
                 return response.json();
             }
         }).then(function (publicData) {
-            console.log(publicData);
+
             //맵을 생성하는 코드
             map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 13,
+                zoom: 14, 
                 center: new google.maps.LatLng(lat ,lng)
         });
     
@@ -71,19 +59,51 @@
           script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
           document.getElementsByTagName('head')[0].appendChild(script);
   
-        //마커를 루프로 돌려서 화면에 찍어주는 코드
-        window.eqfeed_callback = function(publicData) {
+        //마커를 루프로 돌려서 화면에 찍어주는 코드, 지도에 좌표를 찍어주는 코드
+        window.eqfeed_callback = function(results) {
 
-            console.log(publicData);
-            
-            for (var i = 0; i < publicData.features.length; i++) {
-            var coords = publicData.features[i].geometry.coordinates;
-            var latLng = new google.maps.LatLng(lat ,lng);
+            var data = publicData.stores;
+
+          for(var i = 0 ; i < data.length ; i++){
+
+            var latLng = new google.maps.LatLng(data[i].lat, data[i].lng);
             var marker = new google.maps.Marker({
               position: latLng,
-              map: map
-            });
+              map: map,
+              title : data[i].addr + "\n [" + data[i].name + "], 재고상태 : "  + (function(){
+                
+                    if(data[i].remain_stat ==="plenty"){
+                      return "100개이상";
+                    }else if(data[i].remain_stat === "some"){
+                      return "30개 이상 100개 미만 ";
+                    }else if(data[i].remain_stat === "few"){
+                      return "2개이상 30개 미만";
+                    }else if(data[i].remain_stat === "empty"){
+                      return "1개 이하";
+                    }else{
+                      return "판매중지";
+                    }
+
+                 })()
+              });
+
           }
+           
+          //   for (var i = 0; i < results.features.length; i++) {
+
+          //     var coords = results.features[i].geometry.coordinates;
+
+          //     for(var j = 0 ; j < publicData.stores.length ; j++){
+
+          //       var latLng = new google.maps.LatLng(publicData.stores[i].lat, publicData.stores[i].lng);
+
+          //     }//for[j] ends
+              
+          //     var marker = new google.maps.Marker({
+          //       position: latLng,
+          //       map: map
+          //     });
+          // } //for[i] end
         }
         })
 
@@ -95,6 +115,7 @@
 
         }
 
+        //1. 지도 API시작
         function initMap() {
             navigator.geolocation.getCurrentPosition(ajax, coordFail);
         }

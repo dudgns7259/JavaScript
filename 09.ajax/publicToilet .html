@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2 align = "center">서울시 공중화장실 정보</h2>
+
+    <script>
+        function ajax(position) {
+            console.log(position);
+            
+            fetch("http://openapi.seoul.go.kr:8088/474858485862686336327379437178/JSON/SearchPublicToiletPOIService/1/5/").then(function(response){
+                console.log(response)
+
+                if (response.status !== 200) {
+                alert("경로탐색이 불가합니다.")
+            } else {
+                return response.json();
+            }
+            }).then(function(publicData){
+                console.log(publicData);    
+            })
+        };
+
+        (function(){
+            navigator.geolocation.getCurrentPosition(ajax);
+        })();
+
+
+
+    </script>
+
+</body>
+</html>
