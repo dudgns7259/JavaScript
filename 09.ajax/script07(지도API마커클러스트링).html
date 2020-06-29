@@ -70,21 +70,7 @@
             var marker = new google.maps.Marker({
               position: latLng,
               map: map,
-              title : data[i].addr + "\n [" + data[i].name + "], 재고상태 : "  + (function(){
-                
-                    if(data[i].remain_stat ==="plenty"){
-                      return "100개이상";
-                    }else if(data[i].remain_stat === "some"){
-                      return "30개 이상 100개 미만 ";
-                    }else if(data[i].remain_stat === "few"){
-                      return "2개이상 30개 미만";
-                    }else if(data[i].remain_stat === "empty"){
-                      return "1개 이하";
-                    }else{
-                      return "판매중지";
-                    }
-
-                 })()
+              
               });
 
           }

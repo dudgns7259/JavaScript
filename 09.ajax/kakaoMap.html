@@ -1,71 +1,186 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <title>마커 생성하기</title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
     <style>
-        .map {
-            width: 5%;
-            height: 90%;
+        * {
+            margin: 0 auto;
+            font-family: 'Nanum Gothic', sans-serif;
         }
+
+        header {
+            color: white;
+            background-color: rosybrown;
+            height: 60px;
+            text-align: center;
+            width: 80%;
+        }
+        header p {margin: 0 auto; }
+        body {position: relative;}
+        .search, .btnList {position: absolute; width: 80px; height: 80px; z-index: 30; margin: 10px; right:0;}
     </style>
-
-</head>
-
-<body>
-    <div id="map" style="width:100%;height:350px;" class="map"></div>
 
     <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=86cd8cd247e3989f81b7f6587c700e3e"></script>
+</head>
+
+<body>
+    <header>
+        <p>서울시 화장실 찾기 서비스</p><br>
+        <p>지도안에 번호를 누르면 현재위치 기반으로 화장실을 찾아옵니다.</p>
+    </header>
+
+    <div id="map" style="width:80%;height:1300px;">
+        <!-- <button type="button" class="search">화장실찾기</button> -->
+        <div class = "btnList">
+            <button type = "button">1</button>
+            <button type = "button">2</button>
+            <button type = "button">3</button>
+            <button type = "button">4</button>
+            <button type = "button">5</button>
+            </div>
+    </div>
+
+    
+
     <script>
 
-        function ajax(position) {
-            console.log(position);
-            var lat = position.coords.latitude;
-            var lng = position.coords.longitude;
+        //페이지 로딩시 서울중심점을 기준으로 좌표를 생성합니다.
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+            mapOption = {
+                center: new kakao.maps.LatLng(37.5642135, 127.0016985), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+        // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption);
 
+        function panTo() {
+            // 이동할 위도 경도 위치를 생성합니다 
+            var moveLatLon = new kakao.maps.LatLng(33.450580, 126.574942);
 
-            fetch(`http://openapi.seoul.go.kr:8088/474858485862686336327379437178/JSON/SearchPublicToiletPOIService/1/5/`).then(function (response) {
-                console.log(response)
+            // 지도 중심을 부드럽게 이동시킵니다
+            // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+            map.panTo(moveLatLon);
+        }
 
-                if (response.status !== 200) {
-                    alert("경로탐색이 불가합니다.")
+        ///////////////지도 불러오기//////////////////
+        //474858485862686336327379437178
+        //http://openAPI.seoul.go.kr:8088/474858485862686336327379437178/xml/SearchPublicToiletPOIService/1/5/
+
+        // let search = document.querySelector(".search");
+        let btnList = document.querySelector(".btnList");
+
+        let btnNum = 0;
+
+        btnList.onclick = function () {
+            //누른게 버튼이 아니면 종료해줌
+            console.log(event.target);
+            if(event.target.tagName !== "BUTTON") return;
+            console.log(event.target.innerHTML);
+            btnNum = event.target.innerHTML;
+            console.log(btnNum);
+            navigator.geolocation.getCurrentPosition(success, fail);
+        }
+
+        // function getData (a){
+        //     let da = fetch(`http://openAPI.seoul.go.kr:8088/474858485862686336327379437178/json/SearchPublicToiletPOIService/${a}001/${a+1}000/`).then(function(response){
+        //     return response.json();
+        //     });
+        //     return da;
+        // }
+
+        function success(position) {
+            //데이터따옴
+            fetch(`http://openAPI.seoul.go.kr:8088/474858485862686336327379437178/json/SearchPublicToiletPOIService/${--btnNum}001/${++btnNum}000/`).then(function (response) {
+                if (response.status == 404) {
+                    alert('요청에 실패했습니다.');
+                    return;
                 } else {
+                    // response.json();
+                    // response = response.SearchPublicToiletPOIService.row;
+                    // for(let x = 1; x < 5; x++){
+                    //     let d = getData(x);
+                    //     d = d.SearchPublicToiletPOIService.row; 
+                    //     Object.assign(response, d);
+                    // }
                     return response.json();
                 }
-            }).then(function (publicData) {
-                console.log(publicData);
+            }).then(function (jsonData) {
+                    console.log(jsonData);
+                //좌표 따옴
+                let lat = position.coords.latitude;
+                let lng = position.coords.longitude;
+                
+                data = jsonData.SearchPublicToiletPOIService.row;
 
-                var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-                    mapOption = {
-                        center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
-                        level: 5 // 지도의 확대 레벨
-                    };
+                setCenter(lat, lng);
+                var positions = new Array();
 
-                var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+                console.log(data);
+                for (let i = 0; i < data.length; i++) {
+                   var distance = Math.sqrt(Math.pow(lng - data[i].X_WGS84, 2) + Math.pow(lat - data[i].Y_WGS84, 2));
+                  console.log(distance);
+                    if (distance < 126.5) {
+                        // let position = `{"title": "${data[i].FNAME}", " latlng": "new kakao.maps.LatLng(${new kakao.maps.LatLng(lat, lng)})"}`;
+                        var pPoint = {
+                            title: data[i].FNAME,
+                            latlng: new kakao.maps.LatLng( data[i].Y_WGS84, data[i].X_WGS84)
+                        }
+                        console.log(pPoint);
+                        positions.push(pPoint);
+                    }
+                }
 
-                // 마커가 표시될 위치입니다 
-                var markerPosition = new kakao.maps.LatLng(lat, lng);
+                console.log(positions);
+                // 마커 이미지의 이미지 주소입니다
+                var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
-                // 마커를 생성합니다
-                var marker = new kakao.maps.Marker({
-                    position: markerPosition,
-                    title: "야야야"
-                });
+                //마커를 찍ㄱ습니다
+                for (let j = 0; j < positions.length; j++) {
 
-                // 마커가 지도 위에 표시되도록 설정합니다
-                marker.setMap(map);
-            })
-        };
+                    // 마커 이미지의 이미지 크기 입니다
+                    var imageSize = new kakao.maps.Size(24, 35);
 
-        (function () {
-            navigator.geolocation.getCurrentPosition(ajax);
-        })();
+                    // 마커 이미지를 생성합니다    
+                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
+                    // 마커를 생성합니다
+                    var marker = new kakao.maps.Marker({
+                        map: map, // 마커를 표시할 지도
+                        position: positions[j].latlng, // 마커를 표시할 위치
+                        title: positions[j].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                        image: markerImage // 마커 이미지 
+                    });
+                    console.log(positions[j].latlng);
+                    marker.setMap(map);
+                    kakao.maps.event.addListener(marker, 'click',function(){
+                        location.href = (`https://map.kakao.com/link/to/화장실,${positions[j].latlng.Ha},${positions[j].latlng.Ga}`);
+                    })
+                } //마커찍기끗
+            }
+            )}
 
-// 아래 코드는 지도 위의 마커를 제거하는 코드입니다
-// marker.setMap(null);    
+        function fail() {
+            alert("위치정보 수신에 동의해야 이용할 수 있습니다.");
+        }
+
+        function setCenter() {
+            // 이동할 위도 경도 위치를 생성합니다 
+            var moveLatLon = new kakao.maps.LatLng(arguments[0], arguments[1]);
+
+            // 지도 중심을 이동 시킵니다
+            map.setCenter(moveLatLon);
+        }
+
+        //길찾기..?
+        //https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt=%2C%2C523953%2C1084098&rt1=&rt2=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8C%90%EA%B5%90%EC%98%A4%ED%94%BC%EC%8A%A4&rtIds=%2C&rtTypes=%2C
+        //위도경도 출발점하고 검색
+
+        //https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt=%2C%2C523953%2C1084098&rt1=&rt2=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8C%90%EA%B5%90%EC%98%A4%ED%94%BC%EC%8A%A4&rtIds=%2C&rtTypes=%2C
     </script>
 </body>
 

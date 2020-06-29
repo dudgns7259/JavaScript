@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        #map {
+            height: 500px;
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        .btnList {
+            text-align: center;
+            margin: 20px 0px;
+        }
+
+        .btnList button {
+            background-color: #777;
+            color: whitesmoke;
+            border-style: solid;
+            border-color: tomato;
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h2 align="center">서울특별시 공중화장실 정보</h2>
+    <div id="map"></div>
+    <button type="button" class="btn" onclick="start()">정보찾기 시작</button>
+    <div class=btnList>
+        <button type="button" class="btn1">1</button>
+        <button type="button" class="btn2">2</button>
+        <button type="button" class="btn3">3</button>
+        <button type="button" class="btn4">4</button>
+        <button type="button" class="btn5">5</button>
+    </div>
+
+    <script>
+        var btnList = document.querySelectorAll(".btnList button");
+        for (var i = 0; i <= 4; i++) {
+            btnList[i].onclick = function () {
+                console.log(btnList)
+                if (i === 0) {
+                    var link = `http://openAPI.seoul.go.kr:8088/474858485862686336327379437178/json/SearchPublicToiletPOIService/${i}001/${i + 1}000/`
+                } else if (i === 1) {
+                    var link = `http://openAPI.seoul.go.kr:8088/474858485862686336327379437178/json/SearchPublicToiletPOIService/${i}001/${i + 1}000/`
+                } else if (i === 2) {
+                    var link = `http://openAPI.seoul.go.kr:8088/474858485862686336327379437178/json/SearchPublicToiletPOIService/${i}001/${i + 1}000/`
+                } else if (i === 3) {
+                    var link = `http://openAPI.seoul.go.kr:8088/474858485862686336327379437178/json/SearchPublicToiletPOIService/${i}001/${i + 1}000/`
+                } else if (i === 4) {
+                    var link = `http://openAPI.seoul.go.kr:8088/474858485862686336327379437178/json/SearchPublicToiletPOIService/${i}001/${i + 1}000/`
+                }
+
+                console.log(link)
+
+                function ajax(position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+
+
+                    var uluru = { lat: lat, lng: lng };
+
+                    var map = new google.maps.Map(
+                        document.getElementById('map'), { zoom: 15, center: uluru });
+
+
+
+                    //마커찍기
+
+                    var marker = new google.maps.Marker({ position: { lat: lat, lng: lng }, map: map, title: "현위치" });
+
+
+                }
+
+            }
+        }
+
+
+        function coordFail() {
+            alert("위치정보를 찾을 수 없습니다.")
+        }
+
+        function initMap() {
+            navigator.geolocation.getCurrentPosition(ajax,coordFail);
+        }
+
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyLzsJtLB_3HSliwkBmK5NOF5UveCn97k&callback=initMap"> </script>
+</body>
+
+</html>
